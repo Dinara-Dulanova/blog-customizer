@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { StrictMode, CSSProperties } from 'react';
+import { StrictMode, CSSProperties, useState } from 'react';
 import clsx from 'clsx';
 
 import { Article } from './components/article/Article';
@@ -13,19 +13,44 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
+	const [openForm, setOpenForm] = useState(false);
+
+	const toggleOpenForm = () => {
+		setOpenForm((openForm) => !openForm);
+		console.log('opF');
+	};
+
+	const [formState, setFormState] = useState(defaultArticleState); //параметры формы
+	const [articleState, setArticleState] = useState({}); //параметры текста
+
+	const setArticle = () => {
+		console.log('setForm');
+		setArticleState({
+			'--font-family': formState.fontFamilyOption.value,
+			'--font-size': formState.fontSizeOption.value,
+			'--font-color': formState.fontColor.value,
+			'--container-width': formState.contentWidth.value,
+			'--bg-color': formState.backgroundColor.value,
+		} as CSSProperties);
+	};
+
+	const resetForm = () => {
+		console.log('resetForm');
+		setFormState(defaultArticleState);
+		setArticleState({});
+	};
+
 	return (
-		<div
-			className={clsx(styles.main)}
-			style={
-				{
-					'--font-family': defaultArticleState.fontFamilyOption.value,
-					'--font-size': defaultArticleState.fontSizeOption.value,
-					'--font-color': defaultArticleState.fontColor.value,
-					'--container-width': defaultArticleState.contentWidth.value,
-					'--bg-color': defaultArticleState.backgroundColor.value,
-				} as CSSProperties
-			}>
-			<ArticleParamsForm />
+		<div className={clsx(styles.main)} style={articleState}>
+			<ArticleParamsForm
+				openForm={openForm}
+				setOpenForm={setOpenForm}
+				toggleOpenForm={toggleOpenForm}
+				formState={formState}
+				setFormState={setFormState}
+				setArticle={setArticle}
+				resetForm={resetForm}
+			/>
 			<Article />
 		</div>
 	);
