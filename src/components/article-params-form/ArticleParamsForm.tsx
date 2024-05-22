@@ -2,7 +2,7 @@ import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
 
 import styles from './ArticleParamsForm.module.scss';
-import { Dispatch, SetStateAction, useRef } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import clsx from 'clsx';
 import {
 	ArticleStateType,
@@ -20,16 +20,21 @@ import { Separator } from '../separator';
 import { useOutsideClickClose } from '../select/hooks/useOutsideClickClose';
 
 type ArticleParamsProps = {
-	openForm: boolean;
-	toggleOpenForm: () => void;
 	formState: ArticleStateType;
 	setFormState: Dispatch<SetStateAction<ArticleStateType>>;
 	setArticle: () => void;
 	resetForm: () => void;
-	setOpenForm: Dispatch<SetStateAction<boolean>>;
 };
 
 export const ArticleParamsForm = (props: ArticleParamsProps) => {
+	const [openForm, setOpenForm] = useState(false);
+
+	const toggleOpenForm = () => {
+		setOpenForm((openForm) => !openForm);
+		console.log('opF');
+	};
+
+
 	const changeStyle = (elem: OptionType, property: string) => {
 		props.setFormState((prev) => ({
 			...prev,
@@ -47,21 +52,21 @@ export const ArticleParamsForm = (props: ArticleParamsProps) => {
 	const ref = useRef<HTMLDivElement>(null);
 
 	useOutsideClickClose({
-		isOpen: props.openForm,
+		isOpen: openForm,
 		rootRef: ref,
-		onChange: props.setOpenForm,
+		onChange: setOpenForm,
 	});
 
 	return (
 		<>
 			<ArrowButton
-				openForm={props.openForm}
-				toggleOpenForm={props.toggleOpenForm}
+				openForm={openForm}
+				toggleOpenForm={toggleOpenForm}
 			/>
 			<aside
 				ref={ref}
 				className={clsx(styles.container, {
-					[styles.container_open]: props.openForm,
+					[styles.container_open]: openForm,
 				})}>
 				{/* <aside className={styles.container}>	 */}
 				<form className={styles.form} onSubmit={submitForm}>

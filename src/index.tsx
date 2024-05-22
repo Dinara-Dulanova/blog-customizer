@@ -13,12 +13,6 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
-	const [openForm, setOpenForm] = useState(false);
-
-	const toggleOpenForm = () => {
-		setOpenForm((openForm) => !openForm);
-		console.log('opF');
-	};
 
 	const [formState, setFormState] = useState(defaultArticleState); //параметры формы
 	const [articleState, setArticleState] = useState({}); //параметры текста
@@ -41,11 +35,8 @@ const App = () => {
 	};
 
 	return (
-		<div className={clsx(styles.main)} style={articleState}>
+		<div className={styles.main} style={articleState}>
 			<ArticleParamsForm
-				openForm={openForm}
-				setOpenForm={setOpenForm}
-				toggleOpenForm={toggleOpenForm}
 				formState={formState}
 				setFormState={setFormState}
 				setArticle={setArticle}
